@@ -1,0 +1,131 @@
+/*
+ * This prorgram will compute the least prime factor and radical of a positive integer. the program will also
+ generate the prime factorization of the number using iterative concatenation
+ and determine whether the integer is a prime number. 
+ * @author Bernardo Espinoza
+ * <pre>
+ * Date: November 4, 2021
+ * File: Radicalizer.cpp
+ * Course: csc1253 Section 3 <br>
+ * Programming Project #: 3 <br>
+ * Instructor: Dr. Duncan
+ * </pre>
+
+
+
+*/
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int lpf (int n)
+{
+
+  if (n % 2 == 0)
+    return 2;
+  for (int i = 3; i * i <= n; i += 2)
+    {
+      if (n % i == 0)
+	return i;
+    }
+  return n;
+}
+
+void factorize (long n, long &rad, string & factStr)
+{
+  int fact, res;
+  fact = lpf (n);
+  factStr = to_string (fact);
+  rad = fact;
+  res = n;
+  int count = 0;
+  bool isPrime = true;
+
+  while (res % fact == 0)
+    {
+      count++;
+      res = res / fact;
+    }
+  if (count > 1)
+    {
+      factStr = factStr + "^" + to_string (count);
+    }
+  while (fact <= sqrt (res))
+    {
+      fact = fact + 1;
+      if (res % fact == 0)
+	{
+	  rad = rad * fact;
+	  factStr = factStr + " x " + to_string (fact);
+	  count = 0;
+	  while (res % fact == 0)
+	    {
+	      count++;
+	      res = res / fact;
+	    }
+	  if (count > 1)
+	    {
+	      factStr = factStr + "^" + to_string (count);
+	    }
+	}
+    }
+  if (res > 1)
+    {
+      rad = rad * res;
+      factStr = factStr + " x " + to_string (res);
+    }
+
+  cout << "Prime Decomposition: " << n << " = " << factStr << endl;
+  cout << "radical(" << n << ") = " << rad << endl;
+}
+
+
+
+int main ()
+{
+  bool isPrime = true;
+  long rad;
+  string factStr;
+  long n;
+  cout << "Enter a Positive interger--->";
+  cin >> n;
+  if (n <= 1)
+    {
+      cout << "lpf" << "(" << n << ")" << "=" << "nan" << endl;
+      cout << "?isPrime(" << n << ") = false" << endl;
+      cout << "Prime Decomposition: " << n << " = nan" << endl;
+      cout << "radical(" << n << ") = nan" << endl;
+   return 0;
+    }
+  else if (n == 1)
+    {
+      cout << "lpf" << "(" << n << ")" << "=" << "nan" << endl;
+      cout << "?isPrime(" << n << ") = false" << endl;
+      cout << "Prime Decomposition: " << n << " = nan" << endl;
+      cout << "radical(" << n << ") = 1" << endl;
+      return 0;
+    }
+  else
+    cout << "lpf" << "(" << n << ")" << "=" << lpf (n) << endl;
+  int i;
+  for (i = 2; i < n; i++)
+    {
+      if (n % i == 0)
+	{
+	  isPrime = false;
+	}
+    }
+  if (isPrime == 0)
+    {
+      cout << "?isPrime(" << n << ") = false" << endl;
+    }
+  else
+    {
+      cout << "?isPrime(" << n << ") = true" << endl;
+    }
+
+  factorize (n, rad, factStr);
+  return 0;
+}
+
